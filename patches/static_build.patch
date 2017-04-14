@@ -1,0 +1,29 @@
+Description: Enable a truly static build by disabling CGO (libc-netgo).
+Author: Walter Doekes
+Forwarded: no
+Last-Update: 2017-04-14
+
+diff --git a/.promu.yml b/.promu.yml
+index 35cded5..bb7e668 100644
+--- a/.promu.yml
++++ b/.promu.yml
+@@ -1,5 +1,5 @@
+ go:
+-    cgo: true
++    cgo: false
+ repository:
+     path: github.com/prometheus/node_exporter
+ build:
+diff --git a/Makefile b/Makefile
+index 1ccd4d0..99bb450 100644
+--- a/Makefile
++++ b/Makefile
+@@ -66,7 +66,7 @@ staticcheck: $(STATICCHECK)
+ 
+ build: $(PROMU)
+ 	@echo ">> building binaries"
+-	@$(PROMU) build --prefix $(PREFIX)
++	@CGO_ENABLED=0 $(PROMU) build --prefix $(PREFIX)
+ 
+ tarball: $(PROMU)
+ 	@echo ">> building release tarball"

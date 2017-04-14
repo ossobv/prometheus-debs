@@ -1,0 +1,40 @@
+#!/usr/bin/make -f
+# Uncomment this to turn on verbose mode.
+# export DH_VERBOSE=1
+
+export DEB_HOST_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+export DEB_BUILD_GNU_TYPE ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+
+ifeq ($(DEB_BUILD_GNU_TYPE), $(DEB_HOST_GNU_TYPE))
+  confflags += --build $(DEB_HOST_GNU_TYPE)
+else
+  confflags += --build $(DEB_BUILD_GNU_TYPE) --host $(DEB_HOST_GNU_TYPE)
+endif
+
+export PROC := $(shell dpkg-architecture -qDEB_BUILD_GNU_CPU)
+
+ifneq (,$(filter noopt,$(DEB_BUILD_OPTIONS)))
+        BUILDFLAGS += OPTIMIZE=-O0
+else
+        BUILDFLAGS += OPTIMIZE=-O2
+endif
+#BUILDFLAGS += MAKECMDGOALS=dont-optimize
+
+# Disable CGO/netgo stuff. This disables dynamic linking to libc:
+# we get a truly static binary. This is patched into the Makefile
+# instead of exported here because it also influenced the build.
+#export CGO_ENABLED=0
+
+%:
+	dh $@
+
+override_dh_auto_install:
+	# There is no 'install' target in the Makefile
+	mkdir -p $(CURDIR)/debian/node-exporter/usr/sbin
+	cp -a node_exporter $(CURDIR)/debian/node-exporter/usr/sbin/
+
+override_dh_builddeb:
+	# Compress .deb destination files with gzip instead of xz for
+	# compatibility with older Debian releases. See also
+	# debian/source/options for the source package.
+	dh_builddeb -- -Zgzip
