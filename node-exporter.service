@@ -1,0 +1,12 @@
+[Unit]
+Description=Prometheus Node Exporter
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+MemoryLimit=2G
+ExecStart=/usr/sbin/node_exporter
+
+[Install]
+WantedBy=multi-user.target

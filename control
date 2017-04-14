@@ -3,7 +3,7 @@ Section: utils
 Priority: optional
 Maintainer: Walter Doekes <wjdoekes+node-exporter@osso.nl>
 Uploaders: Walter Doekes <wjdoekes+node-exporter@osso.nl>
-Build-Depends: debhelper (>= 9), golang-go (>= 1.6)
+Build-Depends: debhelper (>= 9), dh-systemd, golang-go (>= 1.6)
 Standards-Version: 3.8.4
 Homepage: https://github.com/prometheus/node_exporter
 
@@ -11,5 +11,5 @@ Package: node-exporter
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Export hardware and OS metrics.
- The Prometheus node_exporter exports hardware and OS metrics exposed by
+ The Prometheus Node Exporter exports hardware and OS metrics exposed by
  *NIX kernels, written in Go with pluggable metric collectors.

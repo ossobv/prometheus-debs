@@ -1,4 +1,10 @@
-node-exporter (0.14.0+23+g636c88a-osso0~all) all; urgency=low
+node-exporter (0.14.0+23+g636c88a-osso1~all) all; urgency=low
+
+  * Add systemd service file.
+
+ -- Walter Doekes <wjdoekes+node-exporter@osso.nl>  Fri, 14 Apr 2017 15:06:23 +0200
+
+node-exporter (0.14.0+23+g636c88a-osso1~all) all; urgency=low
 
   * Initial build.
 
