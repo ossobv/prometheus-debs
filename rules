@@ -31,8 +31,9 @@ endif
 
 override_dh_auto_install:
 	# There is no 'install' target in the Makefile
-	mkdir -p $(CURDIR)/debian/node-exporter/usr/sbin
-	cp -a node_exporter $(CURDIR)/debian/node-exporter/usr/sbin/
+	mkdir -p $(CURDIR)/debian/prometheus-node-exporter/usr/sbin
+	cp -a node_exporter \
+	  $(CURDIR)/debian/prometheus-node-exporter/usr/sbin/prometheus-node-exporter
 
 override_dh_builddeb:
 	# Compress .deb destination files with gzip instead of xz for

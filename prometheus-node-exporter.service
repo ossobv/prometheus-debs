@@ -6,7 +6,7 @@ Wants=network.target
 [Service]
 Type=simple
 MemoryLimit=2G
-ExecStart=/usr/sbin/node_exporter
+ExecStart=/usr/sbin/prometheus-node-exporter
 
 [Install]
 WantedBy=multi-user.target

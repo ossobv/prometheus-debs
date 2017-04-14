@@ -1,3 +1,12 @@
+prometheus-node-exporter (0.14.0+23+g636c88a-osso1~all) all; urgency=low
+
+  * So, apparently there already was a prometheus-node-exporter,
+    Jordi!
+    - Well, at least this one is newer and has systemd support.
+    - And it's a pure static build.
+
+ -- Walter Doekes <wjdoekes+prometheus@osso.nl>  Fri, 14 Apr 2017 15:21:23 +0200
+
 node-exporter (0.14.0+23+g636c88a-osso1~all) all; urgency=low
 
   * Add systemd service file.
