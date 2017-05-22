@@ -17,26 +17,41 @@ E.g.:
 
 .. code-block:: console
 
-    $ mkdir -p ~/GOPATH/src/github.com/prometheus
-    $ cd ~/GOPATH/src/github.com/prometheus
-    $ git clone https://github.com/prometheus/node_exporter.git
-
-Check out https://github.com/ossobv/prometheus-node_exporter-deb/ as the
-``debian/`` directory.
+    $ export GOPATH=$HOME/GOPATH
 
 .. code-block:: console
 
-    $ cd node_exporter
-    $ git clone https://github.com/ossobv/prometheus-node_exporter-deb/
+    $ mkdir -p $GOPATH/src/github.com/prometheus
+    $ cd $GOPATH/src/github.com/prometheus
+    $ git clone https://github.com/prometheus/node_exporter.git \
+        $GOPATH/src/github.com/prometheus/node_exporter
+
+Check out https://github.com/ossobv/prometheus-debs/ as the ``debian/``
+directory.
+
+.. code-block:: console
+
+    $ git clone https://github.com/ossobv/prometheus-debs.git \
+        $GOPATH/src/github.com/prometheus/prometheus-debs
+
+Use a bind mount:
+
+.. code-block:: console
+
+    $ mkdir $GOPATH/src/github.com/prometheus/node_exporter/debian
+    $ sudo mount -t none -o bind \
+        $GOPATH/src/github.com/prometheus/prometheus-debs/node_exporter.debian \
+        $GOPATH/src/github.com/prometheus/node_exporter/debian
 
 Check current version and update changelog appropriately.
 
 .. code-block:: console
 
+    $ cd $GOPATH/src/github.com/prometheus/node_exporter
     $ git describe --tags | sed -e 's/^v//;s/-/+/g;s/$/-osso0~all/g'
     0.14.0+23+g636c88a-osso0~all
 
-Prepend something like this to the changelog::
+Prepend something like this to the ``debian/changelog``::
 
     prometheus-node-exporter (0.14.0+23+g636c88a-osso0~all) all; urgency=low
 
@@ -48,7 +63,7 @@ Run dpkg-buildpackage to create the package:
 
 .. code-block:: console
 
-    $ GOPATH=~/GOPATH dpkg-buildpackage -uc -b
+    $ dpkg-buildpackage -uc -b
     ...
 
 At this point, you'll have these two files in the parent directory::
