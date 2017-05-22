@@ -1,3 +1,9 @@
+prometheus-mysqld-exporter (0.10.0+4+g36b2b8b-osso1~all) all; urgency=low
+
+  * Correct the apt descriptions. Add README notes about max connections.
+
+ -- Walter Doekes <wjdoekes+prometheus@osso.nl>  Mon, 22 May 2017 16:38:29 +0200
+
 prometheus-mysqld-exporter (0.10.0+4+g36b2b8b-osso0~all) all; urgency=low
 
   * Initial build.

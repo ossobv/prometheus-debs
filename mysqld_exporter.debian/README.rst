@@ -75,5 +75,6 @@ At this point, you'll have these two files in the parent directory::
 TODO
 ----
 
-* Add config files?
-* Add more docs?
+* Add more docs from the main repo into /usr/share/doc?
+* Add manpage?
+* Allow /etc/default/prometheus-mysqld-exporter to override the my.cnf?
