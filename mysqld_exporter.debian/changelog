@@ -1,0 +1,5 @@
+prometheus-mysqld-exporter (0.10.0+4+g36b2b8b-osso0~all) all; urgency=low
+
+  * Initial build.
+
+ -- Walter Doekes <wjdoekes+prometheus@osso.nl>  Mon, 22 May 2017 16:06:43 +0200
