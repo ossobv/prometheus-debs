@@ -1,3 +1,11 @@
+prometheus-nginxvts-exporter (0.5+4+g878bfa1-osso1~all) all; urgency=low
+
+  * Use a templated unit file. Now start
+    prometheus-nginxvts-exporter@localhost.service to get the default setting.
+    Add configs to /etc/prometheus/nginxvts/*.conf.
+
+ -- Walter Doekes <wjdoekes+prometheus@osso.nl>  Mon, 10 Jul 2017 15:40:25 +0200
+
 prometheus-nginxvts-exporter (0.5+4+g878bfa1-osso0~all) all; urgency=low
 
   * Initial build.

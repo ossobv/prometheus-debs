@@ -1,0 +1,14 @@
+[Unit]
+Description=Prometheus Nginx VTS-module Exporter: %i
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+MemoryLimit=2G
+EnvironmentFile=/etc/prometheus/nginxvts/localhost.conf
+EnvironmentFile=/etc/prometheus/nginxvts/%i.conf
+ExecStart=/usr/sbin/prometheus-nginxvts-exporter -nginx.scrape_uri=${NGINX_STATUS} -telemetry.endpoint=${METRICS_ENDPOINT} -telemetry.address=${METRICS_ADDR} -metrics.namespace=${METRICS_NS}
+
+[Install]
+WantedBy=multi-user.target

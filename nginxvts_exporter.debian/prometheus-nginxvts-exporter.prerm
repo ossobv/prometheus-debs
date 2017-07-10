@@ -1,0 +1,12 @@
+# Automatically added by dh_systemd_start (MANUALLY MODIFIED +"@localhost", service-loop)
+if [ -d /run/systemd/system ] && [ "$1" = remove ]; then
+	for service in $(systemctl --state=active | awk '/^prometheus-nginxvts-exporter@/{print $1}'); do
+		deb-systemd-invoke stop $service >/dev/null
+	done
+fi
+# End automatically added section
+# Automatically added by dh_installinit
+if [ -x "/etc/init.d/prometheus-nginxvts-exporter" ] || [ -e "/etc/init/prometheus-nginxvts-exporter.conf" ]; then
+	invoke-rc.d prometheus-nginxvts-exporter stop || exit $?
+fi
+# End automatically added section

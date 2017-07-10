@@ -68,8 +68,8 @@ Run dpkg-buildpackage to create the package:
 
 At this point, you'll have these two files in the parent directory::
 
-    prometheus-nginxvts-exporter_FIXME+4+g36b2b8b-osso0~all_amd64.changes
-    prometheus-nginxvts-exporter_FIXME+4+g36b2b8b-osso0~all_amd64.deb
+    prometheus-nginxvts-exporter_0.5+4+g878bfa1-osso0~all_amd64.changes
+    prometheus-nginxvts-exporter_0.5+4+g878bfa1-osso0~all_amd64.deb
 
 
 ----

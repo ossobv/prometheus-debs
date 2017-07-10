@@ -55,12 +55,28 @@ override_dh_shlibdeps: has_vars
 	  grep '^shlibs:Depends=' "$$f" 2>/dev/null || \
 	  echo 'shlibs:Depends=' >>"$$f"
 
-#override_dh_systemd_enable:
-#	dh_systemd_enable --no-enable
+override_dh_installinit:
+	dh_installinit --noscripts --name=$(PACKAGE_NAME)@  # template file
+
+override_dh_systemd_enable:
+	# Create /etc/prometheus/nginxvts/localhost.conf
+	d='$(CURDIR)/debian/$(PACKAGE_NAME)/etc/prometheus/nginxvts' && \
+	  mkdir -p "$$d"; printf '%s\n%s\n%s\n%s\n' >"$$d/localhost.conf" \
+	    'NGINX_STATUS=http://localhost/status/format/json' \
+	    'METRICS_ENDPOINT=/metrics' \
+	    'METRICS_ADDR=:9913' \
+	    'METRICS_NS=nginx'
+	# SKIPPED; doesn't work with template units. See:
+	# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=801822
+	# # Add our templated service file.
+	# dh_systemd_enable -- $(PACKAGE_NAME)@localhost
 
 override_dh_systemd_start:
-	# Will do a try-restart in postinst.
-	dh_systemd_start --restart-after-upgrade
+	# postinst/postrm/prerm scripts are done manually.
+	# SKIPPED; doesn't work with template units.
+	# # Will do a try-restart in postinst. Start @localhost by default.
+	# dh_systemd_start --restart-after-upgrade \
+	#   -- $(PACKAGE_NAME)@localhost.service
 
 has_vars:
 	echo $(UPSTREAM_BIN) | grep -qE '^[^ ]+$$'

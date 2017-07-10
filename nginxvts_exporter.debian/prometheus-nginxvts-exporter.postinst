@@ -1,0 +1,37 @@
+# Automatically added by dh_systemd_enable (MANUALLY MODIFIED +"@localhost", s/deb-systemd-helper/deb-systemd-invoke/)
+# This will only remove masks created by d-s-h on package removal.
+deb-systemd-invoke unmask prometheus-nginxvts-exporter@localhost.service >/dev/null || true
+
+# was-enabled defaults to true, so new installations run enable.
+if deb-systemd-helper --quiet was-enabled prometheus-nginxvts-exporter@localhost.service; then
+	# Enables the unit on first installation, creates new
+	# symlinks on upgrades if the unit file has changed.
+	deb-systemd-invoke enable prometheus-nginxvts-exporter@localhost.service >/dev/null || true
+else
+	# Update the statefile to add new symlinks (if any), which need to be
+	# cleaned up on purge. Also remove old symlinks.
+	deb-systemd-helper update-state prometheus-nginxvts-exporter@localhost.service >/dev/null || true
+fi
+# End automatically added section
+# Automatically added by dh_installinit
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ]; then
+	if [ -x "/etc/init.d/prometheus-nginxvts-exporter" ]; then
+		update-rc.d prometheus-nginxvts-exporter defaults >/dev/null
+	fi
+	if [ -x "/etc/init.d/prometheus-nginxvts-exporter" ] || [ -e "/etc/init/prometheus-nginxvts-exporter.conf" ]; then
+		invoke-rc.d prometheus-nginxvts-exporter start || exit $?
+	fi
+fi
+# End automatically added section
+# Automatically added by dh_systemd_start (MANUALLY MODIFIED +"@localhost", service-loop)
+if [ -d /run/systemd/system ]; then
+	systemctl --system daemon-reload >/dev/null || true
+	if [ -n "$2" ]; then
+		for service in $(systemctl --state=active | awk '/^prometheus-nginxvts-exporter@/{print $1}'); do
+			deb-systemd-invoke try-restart $service >/dev/null
+		done
+	else
+		deb-systemd-invoke start prometheus-nginxvts-exporter@localhost.service >/dev/null || true
+	fi
+fi
+# End automatically added section

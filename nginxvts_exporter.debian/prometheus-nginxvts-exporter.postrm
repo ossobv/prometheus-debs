@@ -1,0 +1,35 @@
+# Automatically added by dh_systemd_start
+if [ -d /run/systemd/system ]; then
+	systemctl --system daemon-reload >/dev/null || true
+fi
+# End automatically added section
+# Automatically added by dh_installinit
+if [ "$1" = "purge" ] ; then
+	update-rc.d prometheus-nginxvts-exporter remove >/dev/null
+fi
+
+
+# In case this system is running systemd, we make systemd reload the unit files
+# to pick up changes.
+if [ -d /run/systemd/system ] ; then
+	systemctl --system daemon-reload >/dev/null || true
+fi
+# End automatically added section
+# Automatically added by dh_systemd_enable (s/deb-systemd-helper/deb-systemd-invoke/, service-loop)
+if [ "$1" = "remove" ]; then
+	if [ -x "/usr/bin/systemctl" ]; then
+		for service in $(systemctl | awk '/^prometheus-nginxvts-exporter@/{print $1}'); do
+			deb-systemd-invoke mask $service >/dev/null
+		done
+	fi
+fi
+
+if [ "$1" = "purge" ]; then
+	if [ -x "/usr/bin/systemctl" ]; then
+		for service in $(systemctl | awk '/^prometheus-nginxvts-exporter@/{print $1}'); do
+			deb-systemd-invoke purge $service >/dev/null
+			deb-systemd-invoke unmask $service >/dev/null
+		done
+	fi
+fi
+# End automatically added section
