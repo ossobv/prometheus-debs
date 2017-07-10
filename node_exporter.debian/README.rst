@@ -22,7 +22,6 @@ E.g.:
 .. code-block:: console
 
     $ mkdir -p $GOPATH/src/github.com/prometheus
-    $ cd $GOPATH/src/github.com/prometheus
     $ git clone https://github.com/prometheus/node_exporter.git \
         $GOPATH/src/github.com/prometheus/node_exporter
 
@@ -31,8 +30,9 @@ directory.
 
 .. code-block:: console
 
+    $ mkdir -p $GOPATH/src/github.com/ossobv
     $ git clone https://github.com/ossobv/prometheus-debs.git \
-        $GOPATH/src/github.com/prometheus/prometheus-debs
+        $GOPATH/src/github.com/ossobv/prometheus-debs
 
 Use a bind mount:
 
@@ -40,7 +40,7 @@ Use a bind mount:
 
     $ mkdir $GOPATH/src/github.com/prometheus/node_exporter/debian
     $ sudo mount -t none -o bind \
-        $GOPATH/src/github.com/prometheus/prometheus-debs/node_exporter.debian \
+        $GOPATH/src/github.com/ossobv/prometheus-debs/node_exporter.debian \
         $GOPATH/src/github.com/prometheus/node_exporter/debian
 
 Check current version and update changelog appropriately.

@@ -2,6 +2,10 @@
 # Uncomment this to turn on verbose mode.
 # export DH_VERBOSE=1
 
+UPSTREAM_BIN = mysqld_exporter
+PACKAGE_NAME = $(shell awk '/^Package:/{print $$2}' debian/control)
+PACKAGE_BIN = $(PACKAGE_NAME)
+
 export DEB_HOST_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
 export DEB_BUILD_GNU_TYPE ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 
@@ -30,11 +34,10 @@ endif
 override_dh_auto_build:
 	dh_auto_build -- format build  # but not 'test'
 
-override_dh_auto_install:
-	# There is no 'install' target in the Makefile
-	mkdir -p $(CURDIR)/debian/prometheus-mysqld-exporter/usr/sbin
-	cp -a mysqld_exporter \
-	  $(CURDIR)/debian/prometheus-mysqld-exporter/usr/sbin/prometheus-mysqld-exporter
+override_dh_auto_install: has_vars
+	mkdir -p $(CURDIR)/debian/$(PACKAGE_NAME)/usr/sbin
+	cp -a $(UPSTREAM_BIN) \
+	  $(CURDIR)/debian/$(PACKAGE_NAME)/usr/sbin/$(PACKAGE_BIN)
 
 override_dh_builddeb:
 	# Compress .deb destination files with gzip instead of xz for
@@ -42,6 +45,15 @@ override_dh_builddeb:
 	# debian/source/options for the source package.
 	dh_builddeb -- -Zgzip
 
+override_dh_shlibdeps: has_vars
+	dh_shlibdeps
+	# Silence the dh_gencontrol warning about missing
+	# ${shlibs:Depends} when our go builds are entirely
+	# statically built. And if they aren't we get a proper
+	# dependency listing.
+	f='$(CURDIR)/debian/$(PACKAGE_NAME).substvars' && \
+	  grep '^shlibs:Depends=' "$$f" 2>/dev/null || \
+	  echo 'shlibs:Depends=' >>"$$f"
 
 #override_dh_systemd_enable:
 #	dh_systemd_enable --no-enable
@@ -49,3 +61,8 @@ override_dh_builddeb:
 override_dh_systemd_start:
 	# Will do a try-restart in postinst.
 	dh_systemd_start --restart-after-upgrade
+
+has_vars:
+	echo $(UPSTREAM_BIN) | grep -qE '^[^ ]+$$'
+	echo $(PACKAGE_NAME) | grep -qE '^[^ ]+$$'
+	echo $(PACKAGE_BIN) | grep -qE '^[^ ]+$$'

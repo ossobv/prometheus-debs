@@ -1,0 +1,16 @@
+Description: Don't do a build before running tests (we already did that)
+Author: Walter Doekes
+Forwarded: no
+Last-Update: 2017-07-10
+
+--- a/Makefile	2017-07-10 13:25:01.879658893 +0200
++++ b/Makefile	2017-07-10 13:25:07.807673379 +0200
+@@ -45,7 +45,7 @@ test:
+ 	@echo ">> running tests"
+ 	@$(GO) test -short $(pkgs)
+ 
+-test-e2e: build
++test-e2e:
+ 	@echo ">> running end-to-end tests"
+ 	./end-to-end-test.sh
+ 
