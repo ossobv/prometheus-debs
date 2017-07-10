@@ -1,0 +1,7 @@
+*.swp
+
+/*/files
+/*/debhelper-build-stamp
+/*/prometheus-*-exporter.substvars
+/*/prometheus-*-exporter.*.debhelper
+/*/prometheus-*-exporter/
