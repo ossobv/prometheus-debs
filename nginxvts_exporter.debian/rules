@@ -1,0 +1,68 @@
+#!/usr/bin/make -f
+# Uncomment this to turn on verbose mode.
+# export DH_VERBOSE=1
+
+UPSTREAM_BIN = nginx-vts-exporter
+PACKAGE_NAME = $(shell awk '/^Package:/{print $$2}' debian/control)
+PACKAGE_BIN = $(PACKAGE_NAME)
+
+export DEB_HOST_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+export DEB_BUILD_GNU_TYPE ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+
+ifeq ($(DEB_BUILD_GNU_TYPE), $(DEB_HOST_GNU_TYPE))
+  confflags += --build $(DEB_HOST_GNU_TYPE)
+else
+  confflags += --build $(DEB_BUILD_GNU_TYPE) --host $(DEB_HOST_GNU_TYPE)
+endif
+
+export PROC := $(shell dpkg-architecture -qDEB_BUILD_GNU_CPU)
+
+ifneq (,$(filter noopt,$(DEB_BUILD_OPTIONS)))
+        BUILDFLAGS += OPTIMIZE=-O0
+else
+        BUILDFLAGS += OPTIMIZE=-O2
+endif
+#BUILDFLAGS += MAKECMDGOALS=dont-optimize
+
+# Disable CGO/netgo stuff. This is already set in the Makefile.
+#export CGO_ENABLED=0
+
+
+%:
+	dh $@ --with systemd
+
+override_dh_auto_build:
+	dh_auto_build -- format build  # but not 'test'
+
+override_dh_auto_install: has_vars
+	mkdir -p $(CURDIR)/debian/$(PACKAGE_NAME)/usr/sbin
+	cp -a $(UPSTREAM_BIN) \
+	  $(CURDIR)/debian/$(PACKAGE_NAME)/usr/sbin/$(PACKAGE_BIN)
+
+override_dh_builddeb:
+	# Compress .deb destination files with gzip instead of xz for
+	# compatibility with older Debian releases. See also
+	# debian/source/options for the source package.
+	dh_builddeb -- -Zgzip
+
+override_dh_shlibdeps: has_vars
+	dh_shlibdeps
+	# Silence the dh_gencontrol warning about missing
+	# ${shlibs:Depends} when our go builds are entirely
+	# statically built. And if they aren't we get a proper
+	# dependency listing.
+	f='$(CURDIR)/debian/$(PACKAGE_NAME).substvars' && \
+	  grep '^shlibs:Depends=' "$$f" 2>/dev/null || \
+	  echo 'shlibs:Depends=' >>"$$f"
+
+#override_dh_systemd_enable:
+#	dh_systemd_enable --no-enable
+
+override_dh_systemd_start:
+	# Will do a try-restart in postinst.
+	dh_systemd_start --restart-after-upgrade
+
+has_vars:
+	echo $(UPSTREAM_BIN) | grep -qE '^[^ ]+$$'
+	echo $(PACKAGE_NAME) | grep -qE '^[^ ]+$$'
+	echo $(PACKAGE_BIN) | grep -qE '^[^ ]+$$'

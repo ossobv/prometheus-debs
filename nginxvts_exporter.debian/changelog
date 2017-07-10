@@ -1,0 +1,5 @@
+prometheus-nginxvts-exporter (0.5+4+g878bfa1-osso0~all) all; urgency=low
+
+  * Initial build.
+
+ -- Walter Doekes <wjdoekes+prometheus@osso.nl>  Mon, 10 Jul 2017 13:06:12 +0200

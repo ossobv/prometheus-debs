@@ -1,0 +1,14 @@
+Source: prometheus-nginxvts-exporter
+Section: utils
+Priority: optional
+Maintainer: Walter Doekes <wjdoekes+prometheus@osso.nl>
+Uploaders: Walter Doekes <wjdoekes+prometheus@osso.nl>
+Build-Depends: debhelper (>= 9), dh-systemd, golang-go (>= 1.6)
+Standards-Version: 3.8.4
+Homepage: https://github.com/hnlq715/nginx-vts-exporter
+
+Package: prometheus-nginxvts-exporter
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Export Nginx VTS-module stats
+ The Prometheus nginxvts exporter exports nginx-module-vts stats.
